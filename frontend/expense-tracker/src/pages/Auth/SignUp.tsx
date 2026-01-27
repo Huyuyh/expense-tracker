@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
 import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
 import AuthLayout from "../../components/layouts/AuthLayout";
+import { validateEmail } from "../../utils/helper";
 
 type Props = {};
 
@@ -18,6 +19,23 @@ const SignUp = (props: Props) => {
 
   const handleSignUp = async (e: React.SubmitEvent) => {
     e.preventDefault();
+
+    let profileImageUrl = "";
+
+    if (!fullName) {
+      setError("Please enter your name");
+      return;
+    }
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address");
+    }
+    if (!password) {
+      setError("Please enter the password");
+    }
+
+    setError("");
+
+    // Sign up API call
   };
 
   return (
@@ -55,6 +73,19 @@ const SignUp = (props: Props) => {
               />
             </div>
           </div>
+
+          {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
+
+          <button type="submit" className="btn-primary">
+            SIGN UP
+          </button>
+
+          <p className="text-[13px] text-slate-800 mt-3">
+            Already have an account?{" "}
+            <Link className="font-medium text-primary underline" to="/signUp">
+              Log in
+            </Link>
+          </p>
         </form>
       </div>
     </AuthLayout>
